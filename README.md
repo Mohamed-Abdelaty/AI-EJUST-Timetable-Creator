@@ -48,7 +48,7 @@ The engine breaks the institutional scheduling space into 4 cohorts, solving eac
 │ 4th Year  [█████████████████████████░░░░░░░░░░░░░░░] 0.45s  (76 variables)   │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ Overall   [████████████████████████████████████████] 1.47s  (302 variables)  │
-└─────────────────────────────────────────────────────────────────────────────-┘
+└──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -130,161 +130,175 @@ The web interface features an interactive glassmorphic dashboard with live count
 
 ## 📐 System Architecture
 
-### 1. End-to-End System Flowchart
+### 1. End-to-End System Architecture
 
-```mermaid
-flowchart TD
-    subgraph Client["Presentation Tier (Browser)"]
-        UI["Glassmorphic UI (Bootstrap 5.3 + CSS3)"]
-        JS["Client Runtime (script.js)"]
-    end
-
-    subgraph WebServer["Application Gateway (Flask)"]
-        Router["HTTP Router (app.py)"]
-        Subprocess["Subprocess Job Supervisor"]
-        Deduplicator["Faculty Deduplication Engine"]
-        Jinja["Jinja2 SSR Engine"]
-    end
-
-    subgraph Engine["CSP Optimization Core (generate_timetable.py)"]
-        Loader["Data Ingestion & Normalizer"]
-        MRV["Minimum Remaining Values (MRV) Selector"]
-        FC["Forward Checking & Domain Pruning"]
-        SoftScorer["Multi-Criteria Soft Scorer"]
-        Solver["Recursive Backtracking Engine"]
-    end
-
-    subgraph Storage["Persistence Tier (SQLite 3)"]
-        DB[("data/database.db (100 KB)")]
-    end
-
-    UI <-->|"HTTP Requests / HTML"| Router
-    Router -->|"/generate"| Subprocess
-    Subprocess -->|"Execute Child Process"| Engine
-    Router -->|"/timetable"| Jinja
-    Router -->|"/instructors"| Deduplicator --> Jinja
-    Jinja <-->|"SELECT Schedule"| DB
-    Engine <-->|"SELECT / Batch INSERT"| DB
-    Loader --> MRV --> Solver
-    Solver <--> FC
-    Solver <--> SoftScorer
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                               1. PRESENTATION TIER (BROWSER)                            │
+│  ┌───────────────────────────────────────────────────────────────────────────────────┐  │
+│  │  Glassmorphic UI (Bootstrap 5.3 + Custom CSS)  •  Client Runtime (script.js)      │  │
+│  │  • Real-Time Faculty Search Filter             • html2pdf.js Vector PDF Exporter  │  │
+│  │  • Interactive Cohort & Section Tab Nav        • Animated KPI Counters            │  │
+│  └───────────────────────────────────────────────────────────────────────────────────┘  │
+└───────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                            │ HTTP Requests (GET /timetable, /instructors)
+                                            ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           2. APPLICATION GATEWAY (FLASK app.py)                         │
+│  ┌───────────────────────┐  ┌─────────────────────────────┐  ┌───────────────────────┐  │
+│  │ HTTP Router           │  │ Subprocess Job Supervisor   │  │ Jinja2 Server-Side    │  │
+│  │ GET / | /timetable    │  │ subprocess.run()            │  │ Template Renderer     │  │
+│  │ GET /instructors      │  │ (Forces UTF-8 Stdout)       │  │ timetable.html        │  │
+│  │ GET /generate         │  │                             │  │ instructor_tt.html    │  │
+│  └───────────────────────┘  └──────────────┬──────────────┘  └───────────────────────┘  │
+└────────────────────────────────────────────┼────────────────────────────────────────────┘
+                                             │ Spawns Child Process
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                  3. CSP OPTIMIZATION ENGINE (generate_timetable.py)                     │
+│  ┌───────────────────────────────────────────────────────────────────────────────────┐  │
+│  │  Heuristic Backtracking Search Core  (302 Variables • 1.47s Execution)            │  │
+│  │  • Minimum Remaining Values (MRV) Dynamic Variable Selection                     │  │
+│  │  • Forward Checking & Conflict Domain Pruning                                     │  │
+│  │  • Multi-Criteria Soft Cost Function (Middle-slot priority & gap minimization)    │  │
+│  │  • Modular Cohort Decomposition (1st, 2nd, 3rd, 4th Year pipelines)              │  │
+│  └─────────────────────────────────────────┬─────────────────────────────────────────┘  │
+└────────────────────────────────────────────┼────────────────────────────────────────────┘
+                                             │ Batch Transaction (DELETE + INSERT 433 rows)
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                         4. PERSISTENCE STORAGE (SQLite 3.50.4)                          │
+│  ┌───────────────────────────────────────────────────────────────────────────────────┐  │
+│  │  data/database.db (100 KB Relational Store)                                       │  │
+│  │  Instructors (72) • Courses (94) • Rooms (133) • TimeSlots (20) • Sections (36)   │  │
+│  │  Schedule Output Mart (433 Sessions • 0 Hard Conflicts)                           │  │
+│  └───────────────────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 2. Timetable Generation Sequence Flow
+### 2. Timetable Generation Lifecycle Flow
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Admin as Academic Admin
-    participant Web as Flask Gateway (app.py)
-    participant Worker as Subprocess Worker
-    participant CSP as CSP Solver (generate_timetable.py)
-    participant DB as SQLite (database.db)
-    actor Student as Student / Faculty
-
-    Admin->>Web: GET /generate
-    Web->>Worker: Spawn Child Process (generate_timetable.py)
-    Worker->>CSP: execute() with UTF-8 Environment
-    CSP->>DB: Query Courses, Instructors, Rooms, TimeSlots
-    loop For Each Cohort (1st to 4th Year)
-        CSP->>CSP: Extract Decision Variables (302 Total)
-        CSP->>CSP: Filter Domains by Faculty Skills & Room Type
-        CSP->>CSP: Backtracking + Forward Checking + Soft Scoring
-    end
-    CSP->>DB: Transactional Overwrite (DELETE + INSERT 433 rows)
-    CSP-->>Worker: Exit Code 0 (Success in 1.47s)
-    Worker-->>Web: Subprocess Completed
-    Web-->>Admin: HTTP 302 Redirect to /timetable
-    Student->>Web: GET /timetable
-    Web->>DB: Read Schedule Records
-    Web-->>Student: Render Interactive Timetable Grid
+```text
+[User / Admin] ──────► Trigger GET /generate on Web Gateway
+                             │
+                             ▼
+[Flask app.py] ──────► Spawns Isolated Subprocess: python generate_timetable.py
+                             │
+                             ▼
+[Data Ingestion] ────► Query SQLite (Courses, Instructors, Rooms, TimeSlots)
+                             │
+                             ▼
+ ┌─────────────────── LOOP: ACADEMIC COHORTS (1st to 4th Year) ───────────────────┐
+ │                                                                               │
+ │  1. Variable Generation      Extract variables (69, 81, 76, 76 per cohort)     │
+ │  2. Domain Construction      Filter by Faculty Qualifications & Room Types     │
+ │  3. Heuristic Ordering       Sort values using Multi-Criteria Soft Cost Score  │
+ │  4. MRV Variable Selection   Pick most-constrained unassigned variable         │
+ │  5. Hard-Constraint Check    Ensure NO Faculty, Room, or Cohort overlaps       │
+ │  6. Forward Checking         Prune conflicting domains from unassigned vars    │
+ │  7. Recursive Assignment     Descend or Backtrack upon domain exhaustion       │
+ │                                                                               │
+ └──────────────────────────────────────┬────────────────────────────────────────┘
+                                        │ Complete in 1.47s
+                                        ▼
+[Persistence] ───────► Atomic DB Overwrite (DELETE FROM Schedule + INSERT 433 Rows)
+                             │
+                             ▼
+[Redirect & View] ───► HTTP 302 Redirect to /timetable ──► Student/Faculty Grid
 ```
 
 ---
 
-### 3. Solver Decision Logic Flowchart
+### 3. Solver Decision Logic & Backtracking Engine
 
-```mermaid
-flowchart TD
-    Start(["Start Cohort Solving"]) --> PickVar["Select Variable via MRV Heuristic"]
-    PickVar --> BuildDom["Build Domains (Filtered by Skills & Rooms)"]
-    BuildDom --> ScoreDom["Rank Domain Options via Soft Score"]
-    ScoreDom --> TestHard{"Check Hard Constraints<br/>(No Faculty, Room, or Group Collision)"}
-    
-    TestHard -->|Conflict Found| TryNext["Try Next Domain Value"]
-    TestHard -->|No Conflict| Prune["Forward Checking: Prune Other Domains"]
-    
-    Prune --> Recurse["Recursive Descent (Assign Variable)"]
-    Recurse --> DoneCheck{"All Variables<br/>Assigned?"}
-    
-    DoneCheck -->|Yes| Finish(["Cohort Complete!"])
-    DoneCheck -->|No / Dead End| Backtrack["Backtrack: Restore Pruned Domains"]
-    Backtrack --> TryNext
-    TryNext --> ScoreDom
+```text
+           ┌────────────────────────────┐
+           │ Select Next Variable (MRV) │
+           └─────────────┬──────────────┘
+                         │
+                         ▼
+           ┌────────────────────────────┐
+           │ Filter Qualified Domains   │◄───────────────────────┐
+           └─────────────┬──────────────┘                        │
+                         │                                       │
+                         ▼                                       │
+           ┌────────────────────────────┐                        │
+           │ Rank via Soft Cost Score   │                        │
+           └─────────────┬──────────────┘                        │
+                         │                                       │
+                         ▼                                       │
+           ┌────────────────────────────┐                        │
+           │ Test Hard Constraints      │                        │
+           │ (Faculty, Room, Cohort)    │                        │
+           └─────────────┬──────────────┘                        │
+                         │                                       │
+            Feasible? ───┴─── Conflict? ────────┐                │
+                │                               │                │
+                ▼                               ▼                │
+   ┌─────────────────────────┐     ┌────────────────────────┐    │
+   │ Forward Checking:       │     │ Try Next Domain Value  ├────┘
+   │ Prune Neighbor Domains  │     └────────────────────────┘
+   └────────────┬────────────┘
+                │
+                ▼
+   ┌─────────────────────────┐
+   │ Recursive Descent       │
+   └────────────┬────────────┘
+                │
+     Success? ──┴── Exhausted?
+        │               │
+        ▼               ▼
+┌───────────────┐ ┌───────────────────────────┐
+│ Cohort Solved!│ │ Backtrack:                │
+└───────────────┘ │ Restore Pruned Domains    ├──────────────────┐
+                  └───────────────────────────┘                  │
+                                ▲                                │
+                                └────────────────────────────────┘
 ```
 
 ---
 
-## 🗄️ Relational Database Schema
+## 🗄️ Relational Database Schema & Entities
 
-```mermaid
-erDiagram
-    INSTRUCTORS ||--o{ SCHEDULE : "assigned to"
-    COURSES ||--o{ SCHEDULE : "scheduled as"
-    ROOMS ||--o{ SCHEDULE : "hosted in"
-    SECTIONS ||--o{ SCHEDULE : "attends"
-    TIMESLOTS ||--o{ SCHEDULE : "timed by"
-
-    INSTRUCTORS {
-        TEXT InstructorID PK
-        TEXT Name
-        TEXT PreferredSlots
-        TEXT QualifiedCourses
-    }
-
-    COURSES {
-        TEXT CourseID PK
-        TEXT CourseName
-        INTEGER Credits
-        TEXT Type
-        TEXT Year
-        TEXT Department
-    }
-
-    ROOMS {
-        TEXT RoomID PK
-        TEXT Type
-        INTEGER Capacity
-    }
-
-    TIMESLOTS {
-        TEXT Day
-        TEXT StartTime
-        TEXT EndTime
-    }
-
-    SECTIONS {
-        TEXT SectionID PK
-        INTEGER Semester
-        INTEGER StudentCount
-        TEXT Year
-        TEXT GroupName
-    }
-
-    SCHEDULE {
-        TEXT Day
-        TEXT StartTime
-        TEXT EndTime
-        TEXT CourseID
-        TEXT CourseName
-        TEXT Instructor
-        TEXT Room
-        TEXT GroupName
-        TEXT SectionID
-        TEXT Year
-    }
+```text
+┌────────────────────────┐          ┌──────────────────────────────────────────────┐
+│      INSTRUCTORS       │          │                   SCHEDULE                   │
+├────────────────────────┤          ├──────────────────────────────────────────────┤
+│ InstructorID (PK) TEXT │◄────┐    │ Day                 TEXT                     │
+│ Name               TEXT │     │    │ StartTime           TEXT                     │
+│ PreferredSlots     TEXT │     │    │ EndTime             TEXT                     │
+│ QualifiedCourses   TEXT │     │    │ CourseID      (FK)  TEXT ────────────────────┼───┐
+└────────────────────────┘     │    │ CourseName          TEXT                     │   │
+                               │    │ Instructor    (FK)  TEXT                     │   │
+┌────────────────────────┐     │    │ Room          (FK)  TEXT ──────────────┐     │   │
+│         ROOMS          │     │    │ GroupName           TEXT               │     │   │
+├────────────────────────┤     │    │ SectionID     (FK)  TEXT ────────┐     │     │   │
+│ RoomID       (PK) TEXT │◄────┼────┼──────────────────────────────────┼─────┼─────┘   │
+│ Type               TEXT │    │    │ Year                TEXT         │     │         │
+│ Capacity        INTEGER│    │    └──────────────────────────────────┼─────┼─────────┘
+└────────────────────────┘    │                                       │     │
+                              │     ┌────────────────────────┐        │     │
+┌────────────────────────┐    │     │        SECTIONS        │        │     │
+│       TIMESLOTS        │    │     ├────────────────────────┤        │     │
+├────────────────────────┤    │     │ SectionID    (PK) TEXT │◄───────┘     │
+│ Day                TEXT │    │     │ Semester        INTEGER│              │
+│ StartTime          TEXT │    │     │ StudentCount    INTEGER│              │
+│ EndTime            TEXT │    │     │ Year               TEXT│              │
+└────────────────────────┘    │     │ GroupName          TEXT│              │
+                              │     └────────────────────────┘              │
+                              │                                             │
+                              │     ┌────────────────────────┐              │
+                              │     │        COURSES         │              │
+                              │     ├────────────────────────┤              │
+                              │     │ CourseID     (PK) TEXT │◄─────────────┘
+                              │     │ CourseName         TEXT│
+                              │     │ Credits         INTEGER│
+                              │     │ Type               TEXT│
+                              │     │ Year               TEXT│
+                              │     │ Department         TEXT│
+                              └─────┴────────────────────────┘
 ```
 
 ---
