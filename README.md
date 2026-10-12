@@ -1,127 +1,124 @@
 <div align="center">
 
-# 🗓️ CSIT Timetable Engine
+# 🗓️ AI E-JUST Timetable Creator
 
-### **Next-Gen Academic Timetable & Automated Resource Optimization Platform**
+**Next-Gen Academic Timetable & Automated Resource Optimization Platform**
 
-*Constraint Satisfaction Problem (CSP) Engine • Heuristic Soft-Scoring • Zero Hard Conflicts • Sub-2-Second Solving*
+*Faculty of Computer Science & Information Technology (CSIT) — Egypt-Japan University of Science and Technology (E-JUST)*
 
-<br/>
-
-[![Python](https://img.shields.io/badge/Python-3.9%20%7C%203.14-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-3.1.2-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![SQLite](https://img.shields.io/badge/SQLite-3.50.4-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
-[![License](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](LICENSE)
-
-<br/>
-
-```
-  ┌─────────────────────────────────────────────────────────────────────────────┐
-  │  ⚡ 433 SESSIONS SCHEDULED   │   🎯 0 HARD CONFLICTS   │   ⏱️ 1.47s RUNTIME  │
-  └─────────────────────────────────────────────────────────────────────────────┘
-```
-
-[Overview](#-overview) • [Performance Graphs](#-visual-performance--benchmark-graphs) • [Architecture](#-system-architecture) • [Features](#-key-features) • [Database](#-database-schema) • [Quick Start](#-quick-start)
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.14-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/Flask-3.1.2-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
+  <img src="https://img.shields.io/badge/SQLite-3.50.4-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/Bootstrap-5.3.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap" />
+  <img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge" alt="License" />
+</p>
 
 </div>
 
 ---
 
-## ⚡ Executive Summary & KPI Cards
+## ⚡ Key System Metrics
 
-The **CSIT Timetable Engine** is an automated scheduling solution designed for university departments handling multi-tier cohorts, specialized laboratories, and shared faculty. It eliminates weeks of manual scheduling and spreadsheets by formulating timetabling as a formal **Constraint Satisfaction Problem (CSP)** with forward checking and heuristic pruning.
-
-<div align="center">
-
-| ⏱️ Solver Speed | 🎯 Accuracy | 📚 Curriculum | 🏛️ Facilities |
-| :---: | :---: | :---: | :---: |
-| **`1.47s`**<br/><sub>Total 4-Year Runtime</sub> | **`100%`**<br/><sub>0 Intra-Cohort Conflicts</sub> | **`94 Courses`**<br/><sub>49 Lec / 45 Lab</sub> | **`133 Rooms`**<br/><sub>75 Halls / 58 Labs</sub> |
-
-| 👨‍🏫 Faculty Scale | 👥 Cohort Sections | 📅 Weekly Load | 🗄️ Relational Footprint |
-| :---: | :---: | :---: | :---: |
-| **`72 Instructors`**<br/><sub>54 Actively Assigned</sub> | **`36 Sections`**<br/><sub>Across 4 Dept Tracks</sub> | **`433 Sessions`**<br/><sub>5 Days (Sun–Thu)</sub> | **`100 KB`**<br/><sub>Zero-Config SQLite 3</sub> |
-
-</div>
+| Core Metric | Measurement | System Implementation Scope |
+| :--- | :--- | :--- |
+| ⏱️ **Total Solver Runtime** | **`1.47s`** | Solves the entire 4-year university curriculum in under 2 seconds |
+| 🎯 **Constraint Feasibility** | **`100%`** | **0 intra-cohort conflicts** (zero faculty, room, or section overlaps) |
+| 📚 **Curriculum Courses** | **94 Courses** | 49 Theoretical Lectures + 45 Practical Computer Labs |
+| 🏛️ **Physical Facilities** | **133 Venues** | 75 Lecture Halls (capacity up to 100) + 58 Specialized Computer Labs |
+| 👨‍🏫 **Academic Faculty** | **72 Instructors** | Faculty members with verified course qualification profiles |
+| 👥 **Student Cohorts** | **36 Sections** | General cohorts (Yrs 1-2) + Specialized Tracks: `CSC`, `CNC`, `AID`, `BIF` |
+| 📅 **Scheduled Sessions** | **433 Sessions** | Complete weekly schedule across 5 working days (Sunday to Thursday) |
+| 🗄️ **Relational Storage** | **100 KB** | Zero-dependency transactional SQLite 3 database |
 
 ---
 
 ## 📊 Visual Performance & Benchmark Graphs
 
-### 1. Cohort Solver Runtime & Variable Density
-The solver decouples the academic problem into four cohorts, solving each in under **0.5 seconds**:
-
-```text
-Cohort       Variables   Latency   Performance Bar (Seconds)
-──────────────────────────────────────────────────────────────────────────────
-1st Year   │  69 vars  │  0.28s  │ [█████████████░░░░░░░░░░░░░░░░░░░] 0.28s
-2nd Year   │  81 vars  │  0.36s  │ [████████████████░░░░░░░░░░░░░░░░] 0.36s
-3rd Year   │  76 vars  │  0.38s  │ [█████████████████░░░░░░░░░░░░░░░] 0.38s
-4th Year   │  76 vars  │  0.45s  │ [████████████████████░░░░░░░░░░░░] 0.45s
-──────────────────────────────────────────────────────────────────────────────
-Total      │ 302 vars  │  1.47s  │ [████████████████████████████████] 1.47s End-to-End
-```
-
----
-
-### 2. Weekly Load Balancing (Sessions per Operating Day)
-The heuristic soft-cost function ensures an even distribution of classes across all 5 working days:
-
-```text
-Day          Sessions    Share    Distribution Chart (433 Sessions Total)
-──────────────────────────────────────────────────────────────────────────────
-Sunday     │    86     │ 19.9%  │ [██████████████████████████████░░] 86 sessions
-Monday     │    82     │ 18.9%  │ [█████████████████████████████░░░] 82 sessions
-Tuesday    │    86     │ 19.9%  │ [██████████████████████████████░░] 86 sessions
-Wednesday  │    86     │ 19.9%  │ [██████████████████████████████░░] 86 sessions
-Thursday   │    93     │ 21.4%  │ [████████████████████████████████] 93 sessions
-```
-
----
-
-### 3. Physical Facility Allocation & Specialization
-Rooms are partitioned by physical purpose and capacity constraints:
-
-```text
-Room Type         Count    Share    Allocation Breakdown (133 Facilities)
-──────────────────────────────────────────────────────────────────────────────
-Lecture Halls   │   75   │ 56.4%  │ [████████████████████████████░░░░] Cap: up to 100
-Computer Labs   │   58   │ 43.6%  │ [█████████████████████░░░░░░░░░░░] Cap: 30
-```
-
----
-
-### 4. Advanced Department Track Partitioning (3rd & 4th Year)
-```text
-Specialized Track                  Sections / Cohort   Primary Focus
-──────────────────────────────────────────────────────────────────────────────────────
-CSC  Computer Science            │ [██████████████] 2  │ Advanced Algorithms & Systems
-CNC  Networks & Communications   │ [█████████████████████] 3 │ Network Architecture & Security
-AID  AI & Data Science           │ [█████████████████████] 3 │ Machine Learning & Analytics
-BIF  Bioinformatics              │ [███████] 1         │ Computational Biology & Genomics
-```
-
----
-
-## 🖥️ User Interface & Dashboard Layout
-
-The frontend features a responsive glassmorphic dashboard with live numerical tickers, cohort tabs, section tabs, and real-time faculty filtering:
+### 1. Solver Latency Across Academic Cohorts
+The engine breaks the institutional scheduling space into 4 cohorts, solving each in under **0.5 seconds**:
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│  🎓 CSIT Department                    WEEKLY TIMETABLES                     │
+│ ⚡ SOLVER EXECUTION TIME (302 Variables • 1.47s Total)                       │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ 1st Year  [████████████████░░░░░░░░░░░░░░░░░░░░░░░░] 0.28s  (69 variables)   │
+│ 2nd Year  [████████████████████░░░░░░░░░░░░░░░░░░░░] 0.36s  (81 variables)   │
+│ 3rd Year  [█████████████████████░░░░░░░░░░░░░░░░░░░] 0.38s  (76 variables)   │
+│ 4th Year  [█████████████████████████░░░░░░░░░░░░░░░] 0.45s  (76 variables)   │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Overall   [████████████████████████████████████████] 1.47s  (302 variables)  │
+└─────────────────────────────────────────────────────────────────────────────-┘
+```
+
+---
+
+### 2. Weekly Load Balancing
+A multi-criteria heuristic cost function distributes classes evenly across the 5-day academic week:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 📅 WEEKLY SESSION DISTRIBUTION (433 Sessions Total)                          │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Sunday    [████████████████████████████████████░░░░] 86 sessions  (19.9%)     │
+│ Monday    [██████████████████████████████████░░░░░░] 82 sessions  (18.9%)     │
+│ Tuesday   [████████████████████████████████████░░░░] 86 sessions  (19.9%)     │
+│ Wednesday [████████████████████████████████████░░░░] 86 sessions  (19.9%)     │
+│ Thursday  [████████████████████████████████████████] 93 sessions  (21.4%)     │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 3. Physical Facility Utilization
+Venues are matched strictly by facility typology and student headcount:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🏛️ FACILITY BREAKDOWN (133 Venues Total)                                     │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Lecture Halls  [████████████████████████████░░░░░░░░░░░░] 75 venues (56.4%)   │
+│ Computer Labs  [██████████████████████░░░░░░░░░░░░░░░░░░] 58 venues (43.6%)   │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 4. Advanced Department Track Specialization (3rd & 4th Year)
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🎓 SPECIALIZED DEPARTMENTS                                                   │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ CSC (Computer Science)             [██████████████] 2 sections / cohort      │
+│ CNC (Networks & Communications)    [█████████████████████] 3 sections/cohort │
+│ AID (Artificial Intelligence)      [█████████████████████] 3 sections/cohort │
+│ BIF (Bioinformatics)               [███████] 1 section / cohort              │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🖥️ UI Dashboard Preview
+
+The web interface features an interactive glassmorphic dashboard with live counter statistics, cohort tab navigation, and instant faculty search:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  🎓 CSIT Department — E-JUST             WEEKLY ACADEMIC TIMETABLES          │
 │  [📅 433 Sessions]   [📚 94 Courses]   [👨‍🏫 72 Instructors]   [🏫 133 Rooms]    │
+│                                                                              │
 │  [👨‍🏫 Instructor View]    [📥 Download All PDF]    [🔄 Regenerate Timetable] │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Cohort Nav:  [ 🌱 1st Year ]  [ 📗 2nd Year ]  [ 🔬 3rd Year ]  [ 🎓 4th Year ] │
+│  Cohorts:  [ 🌱 1st Year ]   [ 📗 2nd Year ]   [ 🔬 3rd Year ]   [ 🎓 4th Year ]│
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Group 1 (33 sessions)  ───  [ Sec 1 ] [ Sec 2 ] [ Sec 3 ]                   │
+│  Group 1 (33 Sessions)  ───  [ Section 1 ]  [ Section 2 ]  [ Section 3 ]     │
 │  ┌───────────┬──────────────┬──────────────┬──────────────┬──────────────┐   │
 │  │ Day       │ 9:00 AM      │ 10:45 AM     │ 12:30 PM     │ 2:15 PM      │   │
 │  ├───────────┼──────────────┼──────────────┼──────────────┼──────────────┤   │
 │  │ Sunday    │ 📖 CS111     │ 🧪 CS111 Lab │ —            │ 📖 CS112     │   │
 │  │           │ Hall R101    │ Lab L20      │              │ Hall R204    │   │
-│  │           │ Dr. Ahmed    │ Eng. Omar    │              │ Dr. Mohamed  │   │
+│  │           │ Dr. Kenji    │ Eng. Omar    │              │ Dr. Issa     │   │
 │  ├───────────┼──────────────┼──────────────┼──────────────┼──────────────┤   │
 │  │ Monday    │ —            │ 📖 CS114     │ 🧪 CS114 Lab │ —            │   │
 │  └───────────┴──────────────┴──────────────┴──────────────┴──────────────┘   │
@@ -138,122 +135,99 @@ The frontend features a responsive glassmorphic dashboard with live numerical ti
 ```mermaid
 flowchart TD
     subgraph Client["Presentation Tier (Browser)"]
-        UI["Glassmorphic UI (Bootstrap 5.3 + Custom CSS)"]
-        JS["Client Runtime (script.js)<br/>• html2pdf.js Engine<br/>• Live Search Filter<br/>• Smooth Tickers"]
+        UI["Glassmorphic UI (Bootstrap 5.3 + CSS3)"]
+        JS["Client Runtime (script.js)"]
     end
 
     subgraph WebServer["Application Gateway (Flask)"]
         Router["HTTP Router (app.py)"]
-        Subprocess["Process Supervisor<br/>subprocess.run()"]
-        Filter["Faculty Deduplication Engine"]
-        Jinja["Jinja2 SSR Renderer"]
+        Subprocess["Subprocess Job Supervisor"]
+        Deduplicator["Faculty Deduplication Engine"]
+        Jinja["Jinja2 SSR Engine"]
     end
 
     subgraph Engine["CSP Optimization Core (generate_timetable.py)"]
-        Loader["Data Loader"]
-        MRV["MRV Variable Selector"]
-        FC["Forward Checking & Pruning"]
-        SoftScore["Multi-Criteria Soft Scorer"]
-        Backtrack["Backtracking Search Engine"]
+        Loader["Data Ingestion & Normalizer"]
+        MRV["Minimum Remaining Values (MRV) Selector"]
+        FC["Forward Checking & Domain Pruning"]
+        SoftScorer["Multi-Criteria Soft Scorer"]
+        Solver["Recursive Backtracking Engine"]
     end
 
-    subgraph Persistence["Storage Tier (SQLite 3)"]
-        DB[("data/database.db (100 KB)<br/>Instructors • Courses • Rooms<br/>TimeSlots • Sections • Schedule")]
+    subgraph Storage["Persistence Tier (SQLite 3)"]
+        DB[("data/database.db (100 KB)")]
     end
 
     UI <-->|"HTTP Requests / HTML"| Router
     Router -->|"/generate"| Subprocess
-    Subprocess -->|"Execute (IPC)"| Engine
+    Subprocess -->|"Execute Child Process"| Engine
     Router -->|"/timetable"| Jinja
-    Router -->|"/instructors"| Filter --> Jinja
-    Jinja <-->|"SELECT"| DB
+    Router -->|"/instructors"| Deduplicator --> Jinja
+    Jinja <-->|"SELECT Schedule"| DB
     Engine <-->|"SELECT / Batch INSERT"| DB
-    Loader --> MRV --> Backtrack
-    Backtrack <--> FC
-    Backtrack <--> SoftScore
+    Loader --> MRV --> Solver
+    Solver <--> FC
+    Solver <--> SoftScorer
 ```
 
 ---
 
-### 2. Timetable Generation Sequence Diagram
+### 2. Timetable Generation Sequence Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Admin as Department Admin
-    participant Web as Flask Server (app.py)
+    actor Admin as Academic Admin
+    participant Web as Flask Gateway (app.py)
     participant Worker as Subprocess Worker
     participant CSP as CSP Solver (generate_timetable.py)
     participant DB as SQLite (database.db)
     actor Student as Student / Faculty
 
     Admin->>Web: GET /generate
-    Web->>Worker: Spawn child process (generate_timetable.py)
-    Worker->>CSP: execute() with UTF-8 env
-    CSP->>DB: Read Courses, Instructors, Rooms, TimeSlots
-    loop For each Cohort (1st to 4th Year)
-        CSP->>CSP: Build Variables (302 total)
-        CSP->>CSP: Filter Domains by Qualifications & Room Type
+    Web->>Worker: Spawn Child Process (generate_timetable.py)
+    Worker->>CSP: execute() with UTF-8 Environment
+    CSP->>DB: Query Courses, Instructors, Rooms, TimeSlots
+    loop For Each Cohort (1st to 4th Year)
+        CSP->>CSP: Extract Decision Variables (302 Total)
+        CSP->>CSP: Filter Domains by Faculty Skills & Room Type
         CSP->>CSP: Backtracking + Forward Checking + Soft Scoring
     end
-    CSP->>DB: Atomic Overwrite: DELETE + INSERT (433 rows)
+    CSP->>DB: Transactional Overwrite (DELETE + INSERT 433 rows)
     CSP-->>Worker: Exit Code 0 (Success in 1.47s)
-    Worker-->>Web: Subprocess completed
+    Worker-->>Web: Subprocess Completed
     Web-->>Admin: HTTP 302 Redirect to /timetable
     Student->>Web: GET /timetable
-    Web->>DB: Query Schedule rows
-    Web-->>Student: Render Schedule Grid + Section Tabs
+    Web->>DB: Read Schedule Records
+    Web-->>Student: Render Interactive Timetable Grid
 ```
 
 ---
 
-### 3. Recursive Backtracking State Machine
+### 3. Solver Decision Logic Flowchart
 
 ```mermaid
-stateDiagram-v2
-    [*] --> Unassigned: Variable Selected via MRV
+flowchart TD
+    Start(["Start Cohort Solving"]) --> PickVar["Select Variable via MRV Heuristic"]
+    PickVar --> BuildDom["Build Domains (Filtered by Skills & Rooms)"]
+    BuildDom --> ScoreDom["Rank Domain Options via Soft Score"]
+    ScoreDom --> TestHard{"Check Hard Constraints<br/>(No Faculty, Room, or Group Collision)"}
     
-    state AssignmentPhase {
-        Unassigned --> EvaluateDomain: Build Qualified Options
-        EvaluateDomain --> ScoreOptions: Apply Soft Heuristic Score
-        ScoreOptions --> TestConstraints: Check Instructor, Room, Group
-        
-        state Decision <<choice>>
-        TestConstraints --> PruneForward: Valid (No Hard Conflict)
-        TestConstraints --> NextValue: Conflict Detected
-        
-        PruneForward --> Recurse: Prune Neighbouring Domains
-        
-        state Result <<choice>>
-        Recurse --> Assigned: Child Branch Complete
-        Recurse --> Backtrack: Child Branch Empty
-        
-        Backtrack --> Restore: Restore Pruned Domains
-        Restore --> NextValue: Try Next Candidate
-    }
+    TestHard -->|Conflict Found| TryNext["Try Next Domain Value"]
+    TestHard -->|No Conflict| Prune["Forward Checking: Prune Other Domains"]
     
-    Assigned --> [*]: All Cohort Variables Solved
+    Prune --> Recurse["Recursive Descent (Assign Variable)"]
+    Recurse --> DoneCheck{"All Variables<br/>Assigned?"}
+    
+    DoneCheck -->|Yes| Finish(["Cohort Complete!"])
+    DoneCheck -->|No / Dead End| Backtrack["Backtrack: Restore Pruned Domains"]
+    Backtrack --> TryNext
+    TryNext --> ScoreDom
 ```
 
 ---
 
-## ⚡ Key Features
-
-| Feature | Technical Implementation | Practical Benefit |
-| :--- | :--- | :--- |
-| **🧠 High-Speed CSP Solver** | Backtracking search coupled with **Minimum Remaining Values (MRV)** and **Forward Checking** | Prevents combinatorial explosion and solves 302 variables in ~1.47 seconds. |
-| **🎯 Multi-Criteria Soft Cost** | Heuristic formula rewarding midday slots (`10:45`, `12:30`) and penalizing multi-period gaps | Eliminates scattered schedules and spreads classes evenly across the 5-day week. |
-| **👥 Department Track Division** | Dynamic cohort segmentation: 1st/2nd-year general groups vs 3rd/4th-year specialized tracks | Accommodates distinct graduation tracks (`CSC`, `CNC`, `AID`, `BIF`) without room collisions. |
-| **🏢 Facility & Skill Routing** | Automated matching against `QualifiedCourses` and facility types (`Lecture` vs `Lab`) | Prevents unqualified faculty assignments and ensures lab equipment availability. |
-| **🔍 Real-Time Faculty Search** | Client-side DOM filtering with live search input and quick-jump anchor pills | Faculty can locate their weekly teaching schedule and session count in milliseconds. |
-| **📄 Vector PDF Export** | Client-side vector PDF generation using `html2pdf.js` with $2\times$ canvas scaling | Zero backend CPU load; produces sharp, printable A4 timetables for sections or faculty. |
-| **🛡️ Isolated Subprocess Worker** | Generation executes via `subprocess.run()` with forced UTF-8 standard output | Prevents long-running web worker thread locks and fixes Windows `cp1252` encoding crashes. |
-
----
-
-## 🗄️ Database Schema
-
-The database uses a clean, normalized relational design in SQLite (`data/database.db`):
+## 🗄️ Relational Database Schema
 
 ```mermaid
 erDiagram
@@ -315,29 +289,23 @@ erDiagram
 
 ---
 
-## 🧰 Tech Stack Reference
+## ⚡ Technical Highlights
 
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ LAYER            TECHNOLOGY              VERSION        ROLE                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ Language         Python                  3.9+ / 3.14    Core Runtime        │
-│ Web Framework    Flask                   3.1.2          HTTP Routing & SSR  │
-│ Template Engine  Jinja2                  Built-in       Dynamic Templates   │
-│ Database         SQLite 3                3.50.4         Relational Storage  │
-│ Algorithmic      CSP / MRV               Custom         Constraint Engine   │
-│ Styling          Bootstrap + CSS3        5.3.3          Glassmorphism UI    │
-│ Icons            Font Awesome            6.5.0          Vector Icons        │
-│ PDF Engine       html2pdf.js             0.9.2          Client Vector PDF   │
-│ Architecture     Process Isolation       stdlib         Subprocess Worker   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+| Feature | Technical Architecture | Engineering Value |
+| :--- | :--- | :--- |
+| **🧠 High-Speed CSP Solver** | Backtracking search with **Minimum Remaining Values (MRV)** and **Forward Checking** | Solves 302 decision variables in **1.47 seconds** with 0 hard conflicts. |
+| **🎯 Multi-Criteria Soft Cost** | Priority scoring rewarding midday slots (`10:45 AM`, `12:30 PM`) and penalizing gaps | Prevents fragmented schedules and limits daily cohort workload to $\le 2$ sessions. |
+| **👥 Department Track Division** | Dynamic cohort segmentation between general years (Y1–2) and specialized tracks (Y3–4) | Seamlessly schedules 4 graduation tracks (`CSC`, `CNC`, `AID`, `BIF`). |
+| **🏢 Facility & Skill Routing** | Automated matching against `QualifiedCourses` and facility types (`Lecture` vs `Lab`) | Guarantees faculty skill coverage and matches lab capacities (30 students/lab). |
+| **🔍 Real-Time Faculty Directory** | Client-side DOM filtering with live search input and alphabetical jump navigation | Faculty can instantly inspect their weekly schedule and session workload. |
+| **📄 Client-Side Vector PDF** | Browser-based vector rendering via `html2pdf.js` with $2\times$ canvas scaling | Zero backend server load; exports crisp A4 PDFs for sections or faculty. |
+| **🛡️ Fault-Tolerant Process** | Isolated child process execution via `subprocess.run()` with forced UTF-8 encoding | Prevents long-running web worker thread locks and eliminates Windows encoding crashes. |
 
 ---
 
 ## 📁 Repository Structure
 
-```
+```text
 timetable_project/
 ├── data/                                  # Database & raw seed CSV datasets
 │   ├── database.db                        # SQLite database (100 KB, 6 tables, 433 rows)
@@ -359,61 +327,56 @@ timetable_project/
 ├── create_database.py                     # Database initialization and CSV ETL script
 ├── generate_timetable.py                  # Core Constraint Satisfaction Problem (CSP) solver
 ├── verify_constraints.py                  # Automated schedule audit script
+├── LICENSE                                # MIT open-source license
+├── .gitignore                             # Git ignore rules for clean repository
 └── README.md                              # Project documentation
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start Guide
 
 ### 1. Prerequisites
-* **Python**: `3.9` or newer (fully verified on `Python 3.14.0`).
+* **Python**: `3.9` or newer (tested on `Python 3.14.0`).
 * **Package Manager**: `pip`.
 
-### 2. Installation
+### 2. Clone Repository & Install Dependencies
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/timetable_project.git
-cd timetable_project
-
-# Install Flask
+git clone https://github.com/Mohamed-Abdelaty/AI-EJUST-Timetable-Creator.git
+cd AI-EJUST-Timetable-Creator
 pip install flask
 ```
 
 ### 3. Initialize the Database
-Import raw CSV datasets and build the relational schema:
+Parse raw CSV files and generate the relational schema:
 ```bash
 python create_database.py
 ```
 
-### 4. Run the Solver (CLI)
-Generate conflict-free schedules in under two seconds:
+### 4. Run the Standalone CSP Solver (CLI)
+Generate conflict-free schedules in under 2 seconds:
 ```bash
 python generate_timetable.py
 ```
 
-### 5. Launch the Web Application
+### 5. Start the Web Portal
 ```bash
 python app.py
 ```
 Open **`http://127.0.0.1:5000/`** in your browser.
 
-<div align="center">
-
-| Route | Purpose |
-| :--- | :--- |
-| **`GET /`** | Auto-redirects to `/timetable` |
-| **`GET /timetable`** | Interactive student schedule matrix with section tabs |
-| **`GET /instructors`** | Faculty schedule directory with real-time search |
-| **`GET /generate`** | Triggers background CSP solver and refreshes views |
-
-</div>
+| Route | Method | Description |
+| :--- | :--- | :--- |
+| **`/`** | `GET` | Automatically redirects to `/timetable` |
+| **`/timetable`** | `GET` | Interactive student schedule matrix with section tabs |
+| **`/instructors`** | `GET` | Faculty schedule directory with real-time search |
+| **`/generate`** | `GET` | Triggers background CSP solver and refreshes views |
 
 ---
 
-## 🛡️ Verification & Hard Constraint Audit
+## 🛡️ Constraint Verification Routine
 
-You can verify that the generated schedule has **zero hard conflicts** (no faculty or room double-booking within cohorts) using the Python verification routine:
+Audit the generated schedule to confirm **zero hard conflicts** (no instructor or room collisions):
 
 ```bash
 python -c "
@@ -429,7 +392,7 @@ conn.close()
 "
 ```
 
-**Output**:
+**Expected Verification Output**:
 ```text
 1st Year: 99 sessions | 0 Faculty Conflicts | 0 Room Conflicts
 2nd Year: 117 sessions | 0 Faculty Conflicts | 0 Room Conflicts
@@ -441,15 +404,9 @@ conn.close()
 
 ## 📄 License & Attribution
 
-This project is open-source under the **[MIT License](https://opensource.org/licenses/MIT)**.
+This project is open-source under the **[MIT License](LICENSE)**.
 
 ```text
 MIT License
-Copyright (c) 2025-2026 CSIT Department / Lead Contributors
+Copyright (c) 2025-2026 E-JUST CSIT Department / Lead Contributors
 ```
-
-<div align="center">
-  <sub>Built for academic institutions with zero-conflict guarantees.</sub>
-</div>
-#   A I - E J U S T - T i m e t a b l e - C r e a t o r  
- 
