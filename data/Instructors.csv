@@ -1,0 +1,73 @@
+InstructorID,Name,Role,QualifiedCourses
+PROF01,Dr. Reda Elbasiony,Professor,"CSC111,CNC312, AID426, CSC317, CSC422" 
+PROF02,Dr. Ayman Arafa,Professor,"MTH111, MTH121, CNC320, CSC321" 
+PROF03,Dr. Adel Fathy,Professor,"PHY113" 
+PROF04,Dr. Sherine Elmotasem,Professor,LRA101 
+PROF05,Prof. Ahmed Allam,Professor,ECE111 
+PROF06,Dr. Sameh Sherif,Professor,"ECE111, BIF411, BIF412, BIF421" 
+PROF07,Dr. Ahmed Arafa,Professor,"CSC211, AID413, AID427, CNC411, CSC221, CNC320, CNC321" 
+PROF08,Dr. Ahmed Anter,Professor,"AID311" 
+PROF09,Prof. Mostafa Soliman,Professor,"CSE214, CSC115, CSC315, CNC222, CNC223, CSC113" 
+PROF10,Dr. Ahmed Abdel-Malk,Professor,"ECE324, CNC325, ECE214 , ACM215" 
+PROF11,Prof. Ahmed Bayumi,Professor,"AID428, AID312, CSC415, BIF327, AID412, AID422" 
+PROF12,Dr. Hataba,Professor,"CNC418, CNC419, CSC317" 
+PROF13,Prof. Samir Ahmed,Professor,"CNC413, CNC311, CNC323, CNC324, CNC327, AID413" 
+PROF14,Dr. Mohamed Issa,Professor,"BIF425, AID417, CNC314, CSC122, BIF321, BIF323, BIF328, BIF425" 
+PROF15,Dr. Mustafa AlSayed,Professor,"CSC426, CSC412, CNC415, CSC314, CSC414" 
+PROF16,Dr. Mohamed Akhames,Professor,"CSC410, CSC411, CNC324, BIF424, AID323, CSC324, AID421, CSC425, CSC427" 
+PROF17,Prof. Marghany Hassan,Professor,"BIF413, AID321, AID411, CSC114, CSC322, CSE312, AID111, BIF413" 
+PROF18,Dr. Nadia Fawzy,Professor,"CSC221, AID322, CNC111" 
+PROF19,Dr. Karim Hamed,Professor,"MTH212" 
+PROF20,Dr. Moustafa Mahmoud,Professor,"CSC121, CSC323, CNC422" 
+PROF21,Dr. Ali Kandil,Professor,"MTH121" 
+PROF22,Mohamad Ayad,Professor,CHM113 
+PROF23,Prof. gehad G. Mohamed,Professor,CHM113 
+PROF24,Dr. Mostafa Mohamed,Professor,"AID322, AID325" 
+PROF25,Dr. Yassen,Professor,"AID324, CNC421" 
+PROF26,Prof. Adel Al-senn,Professor,"LRA104" 
+PROF27,Dr. Mohamed El-khateeb,Professor,"" 
+PROF28,Prof. Said Sadik,Professor,"LRA306" 
+PROF29,Dr. Maali Fouad,Professor,"" 
+PROF30,Prof. Mohamed Hassan,Professor,"" 
+PROF31,Dr. Amal Gomaa,Professor,"LRA103" 
+PROF32,Dr. Kenji Tanaka,Professor," LRA403" 
+PROF33,Dr. Yumi Yamamoto,Professor,"LRA401, LRA402, LRA404" 
+PROF34,Dr. Eman Allam,Professor,BIF311 
+PROF35,Dr. graduation BIF,Professor,BIF410 
+PROF36,Dr. graduation CNC,Professor,CNC414 
+PROF37,Dr. graduation CSC,Professor,CSC413 
+PROF38,Dr. graduation AI,Professor,AID414 
+PROF39,Dr. Haruto Ito,Professor,"LRA401" 
+AP01,Eng. Fatma Elsayed,Assistant Professor,"AID4170, CNC3110, CSC1220, CNC3210, CNC4220" 
+AP02,Eng. Nada Essam,Assistant Professor,"AID4110, BIF4250, CSC1210, CSC1220, AID3250" 
+AP03,Eng. Salma Alashry,Assistant Professor,"AID3210, CNC3140, CSC110, CSC1220, AID3220, CSC3210, CSC3220" 
+AP04,Eng. Mariam Ismael,Assistant Professor,"CSC1110, CNC4110, CSC1210, CSC2210, BIF3210, BIF3220" 
+AP05,Eng. Nada Hamdy,Assistant Professor,"CSC1110, CNC3110, CSE3120, CNC4220" 
+AP06,Eng. Salma Waleed,Assistant Professor,"AID3120, AID3110, CSC3230, CNC4210, CSC3170" 
+AP07,Eng. Menna Hamdi,Assistant Professor,"CNC3120, CNC1110, CSC1220, CSC3240, AID4260" 
+AP08,Eng. Omnya Ramadan,Assistant Professor,"CSE2140, CSC3150" 
+AP09,Eng. Heba Abdelkader,Assistant Professor,"CSE2140, AID4120, AID4220" 
+AP10,Eng. Nourhan Waleed,Assistant Professor,"AID3120, CNC3140, CSC1210, CNC3240, CNC4210" 
+AP11,Eng. Menna Magdy,Assistant Professor,"CSC2110, CSC3170, AID3230, CSE3120, CSC4220" 
+AP12,Eng. Nada Ahmed,Assistant Professor,"CSC2110, CSC3170, AID3250, CSC4220" 
+AP13,Eng. Laila Ibrahim,Assistant Professor,"CSC1210, PHY1130, ECE1110" 
+AP14,Eng. Tarek Salah,Assistant Professor,"CSE2140, AID3110, CNC3140" 
+AP15,Eng. Rana Mohamed,Assistant Professor,"CNC2230, AID3240" 
+AP16,Eng. Saeed Mostafa,Assistant Professor,"CSC2210, CNC320, AID4210, CSC4270" 
+AP17,Eng. Maria Mounir,Assistant Professor,"CSC2210, CNC3230, CSC4250" 
+AP18,Eng. Alaa Essam,Assistant Professor,"BIF3230, AID4210" 
+AP19,Eng. Bassant Tolba,Assistant Professor,CNC3250 
+AP20,Eng. Menna Mahmoud,Assistant Professor,"CNC3270, AID4220,CSC1140" 
+AP21,Eng. Nouran Moussa,Assistant Professor,"BIF4130,BIF4250, BIF4240,CSC4140" 
+AP22,Eng. Aya Tarek,Assistant Professor,"CNC4130,CSC4120,CNC4180" 
+AP23,Eng. Omar Faramawy,Assistant Professor,"MTH1110,ACM2150,MTH2120" 
+AP24,Eng. ECE,Assistant Professor,"ECE2140,BIF4110,BIF4120" 
+AP25,Eng. BAS ,Assistant Professor,BIF3110
+AP26,Eng. Zeina Shreif,Assistant Professor,"CSC3140,CSC4260,CSC410"
+AP31,Eng. BIF,Assistant Professor,BIF4120
+AP32,Eng. CSC,Assistant Professor,CSC4110
+AP33,Eng. CNC,Assistant Professor,CNC4150
+AP34,Eng. Sama Osama,Assistant Professor,"CNC4190,AID3120,ECE3240"
+AP35,Eng. Mariam Nagy,Assistant Professor,AID4130
+AP36,Eng. Zeina Ahmed,Assistant Professor,AID4280
+AP37,Eng.Nour Akram,Assistant Professor,CSC3150

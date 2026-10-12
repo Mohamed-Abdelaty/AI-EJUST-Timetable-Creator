@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instructor Timetables — CSIT</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Generating Timetable...</div>
+  <div class="loading-sub">This may take up to 5 minutes. Please wait.</div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+{% set ns = namespace(total=0) %}
+{% set instructors_list = [] %}
+{% for r in data %}
+  {% if r[5] and r[5] not in instructors_list %}{% set _ = instructors_list.append(r[5]) %}{% endif %}
+{% endfor %}
+
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="container hero-inner">
+    <div class="hero-badge"><i class="fas fa-chalkboard-teacher"></i> Instructor View</div>
+    <h1 class="hero-title">Instructor Timetables</h1>
+    <p class="hero-subtitle">Weekly schedules for all CSIT teaching staff</p>
+
+    <div class="row g-3 stat-row">
+      <div class="col-6 col-md-4">
+        <div class="stat-card">
+          <div class="stat-icon">👨‍🏫</div>
+          <div class="stat-num" data-count="{{ instructors_list|length }}">0</div>
+          <div class="stat-lbl">Instructors</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-num" data-count="{{ data|length }}">0</div>
+          <div class="stat-lbl">Sessions</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <div class="stat-card">
+          <div class="stat-icon">🏫</div>
+          <div class="stat-num" data-count="5">0</div>
+          <div class="stat-lbl">Days / Week</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-btns">
+      <a href="/timetable" class="btn-glass"><i class="fas fa-calendar-alt"></i> Student View</a>
+      <button class="btn-white" onclick="downloadAll()"><i class="fas fa-download"></i> Download All PDF</button>
+      <button class="btn-gen" onclick="generateTimetable()"><i class="fas fa-sync-alt"></i> Regenerate</button>
+    </div>
+  </div>
+</section>
+
+<!-- Year Nav (visual only, links to student page) -->
+<div class="year-nav-wrap">
+  <div class="year-nav" style="background:white;">
+    <div style="padding:8px 20px; font-size:.85rem; color:#667eea; font-weight:700; display:flex; align-items:center; gap:8px;">
+      <i class="fas fa-search" style="opacity:.6;"></i>
+      Search instructor below
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONTENT ===================== -->
+<div class="main-content">
+  <div class="container">
+
+    <!-- Search Bar -->
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" class="search-input" id="instructorSearch" placeholder="Search instructor by name...">
+    </div>
+
+    <!-- Jump Pills -->
+    <div class="jump-nav">
+      {% for instructor in instructors_list|sort %}
+      <a class="jump-pill" href="#instr-{{ loop.index }}" onclick="void(0)">{{ instructor }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- Instructor Cards -->
+    {% set days  = ['Sunday','Monday','Tuesday','Wednesday','Thursday'] %}
+    {% set slots = ['9:00 AM','10:45 AM','12:30 PM','2:15 PM'] %}
+    {% set ycolors = ['y1','y2','y3','y4'] %}
+
+    <div id="all">
+    {% for instructor in instructors_list|sort %}
+    {% set icolor = ycolors[loop.index0 % 4] %}
+    {% set session_count = [] %}
+    {% for r in data %}{% if r[5]==instructor %}{% set _ = session_count.append(1) %}{% endif %}{% endfor %}
+
+    <div class="group-card instructor-card" id="instr-{{ loop.index }}" data-instructor="{{ instructor }}">
+      <div class="group-card-header gh-{{ icolor }}">
+        <span class="group-icon">👨‍🏫</span>
+        <span>{{ instructor }}</span>
+        <span class="workload-badge"><i class="fas fa-clock me-1" style="font-size:.65rem;"></i>{{ session_count|length }} sessions / week</span>
+      </div>
+      <div class="group-card-body">
+        <div class="tt-wrap">
+          <table class="tt">
+            <thead>
+              <tr>
+                <th>Day</th>
+                {% for s in slots %}<th><i class="far fa-clock me-1"></i>{{ s }}</th>{% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for day in days %}
+              <tr>
+                <td class="day-cell">{{ day }}</td>
+                {% for slot in slots %}
+                {% set entries = [] %}
+                {% for r in data %}
+                  {% if r[5]==instructor and r[0]==day and r[1]==slot %}{% set _ = entries.append(r) %}{% endif %}
+                {% endfor %}
+                <td>
+                  {% if entries %}
+                  {% set e = entries[0] %}
+                  {% set is_lab = 'lab' in e[4].lower() %}
+                  <div class="cell-card {% if is_lab %}cell-lab{% else %}cell-lec{% endif %}">
+                    <span class="cell-badge">{% if is_lab %}🧪 Lab{% else %}📖 Lecture{% endif %}</span>
+                    <div class="cell-name">{{ e[4] }}</div>
+                    <div class="cell-info">
+                      <div class="cell-row"><i class="fas fa-users"></i>{{ e[7] }} ({{ e[9] }})</div>
+                      <div class="cell-row"><i class="fas fa-door-open"></i>{{ e[6] }}</div>
+                    </div>
+                  </div>
+                  {% else %}
+                  <div class="cell-empty">—</div>
+                  {% endif %}
+                </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button class="btn-dl" onclick="downloadInstructor('{{ instructor }}')">
+          <i class="fas fa-file-pdf"></i> Download {{ instructor }}'s Schedule
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p>© 2025 CSIT Department &nbsp;|&nbsp; <i class="fas fa-code"></i> Automated Timetable System</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

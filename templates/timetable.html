@@ -1,0 +1,310 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSIT Timetables</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Generating Timetable...</div>
+  <div class="loading-sub">This may take up to 5 minutes. Please wait.</div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+{% set ns = namespace(courses=[], instructors=[], rooms=[]) %}
+{% for r in data %}
+  {% if r[3] not in ns.courses %}{% set _ = ns.courses.append(r[3]) %}{% endif %}
+  {% if r[5] not in ns.instructors %}{% set _ = ns.instructors.append(r[5]) %}{% endif %}
+  {% if r[6] not in ns.rooms %}{% set _ = ns.rooms.append(r[6]) %}{% endif %}
+{% endfor %}
+
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="container hero-inner">
+    <div class="hero-badge">
+      <i class="fas fa-graduation-cap"></i>
+      CSIT Department
+    </div>
+    <h1 class="hero-title">Weekly Timetables</h1>
+    <p class="hero-subtitle">Computer Science &amp; Information Technology — Academic Schedule</p>
+
+    <div class="row g-3 stat-row">
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-num" data-count="{{ data|length }}">0</div>
+          <div class="stat-lbl">Sessions</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-num" data-count="{{ ns.courses|length }}">0</div>
+          <div class="stat-lbl">Courses</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">👨‍🏫</div>
+          <div class="stat-num" data-count="{{ ns.instructors|length }}">0</div>
+          <div class="stat-lbl">Instructors</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">🏫</div>
+          <div class="stat-num" data-count="{{ ns.rooms|length }}">0</div>
+          <div class="stat-lbl">Rooms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-btns">
+      <a href="/instructors" class="btn-glass">
+        <i class="fas fa-chalkboard-teacher"></i> Instructor View
+      </a>
+      <button class="btn-white" onclick="downloadAll()">
+        <i class="fas fa-download"></i> Download All PDF
+      </button>
+      <button class="btn-gen" onclick="generateTimetable()">
+        <i class="fas fa-sync-alt"></i> Regenerate
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== YEAR TABS ===================== -->
+{% set years = ['1st Year','2nd Year','3rd Year','4th Year'] %}
+{% set ycolors = {'1st Year':'y1','2nd Year':'y2','3rd Year':'y3','4th Year':'y4'} %}
+{% set yicons  = {'1st Year':'🌱','2nd Year':'📗','3rd Year':'🔬','4th Year':'🎓'} %}
+{% set gicons  = {'Group 1':'🔵','Group 2':'🟣','Group 3':'🟢'} %}
+{% set dicons  = {'CSC':'💻','CNC':'🌐','AID':'🤖','BIF':'🧬'} %}
+{% set groups  = ['Group 1','Group 2','Group 3'] %}
+{% set depts   = ['CSC','CNC','AID','BIF'] %}
+{% set days    = ['Sunday','Monday','Tuesday','Wednesday','Thursday'] %}
+{% set slots   = ['9:00 AM','10:45 AM','12:30 PM','2:15 PM'] %}
+
+<div class="year-nav-wrap">
+  <div class="year-nav">
+    {% for year in years %}
+    <button class="year-tab {% if loop.first %}active{% endif %}" onclick="showYear('{{ year }}')">
+      {{ yicons[year] }} {{ year }}
+    </button>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- ===================== CONTENT ===================== -->
+<div class="main-content">
+  <div class="container" id="all">
+
+    {% set ns2 = namespace(gid=0) %}
+    {% for year in years %}
+    {% set yc = ycolors[year] %}
+    <div id="{{ year }}" class="year-section {% if not loop.first %}d-none{% endif %}">
+
+      <div class="year-header">
+        <span class="year-pill yp{{ loop.index }}">{{ yicons[year] }} {{ year }}</span>
+        <div class="year-divider"></div>
+      </div>
+
+      {% if year in ['1st Year','2nd Year'] %}
+      <!-- Groups -->
+      {% for group in groups %}
+        {% set ns2.gid = ns2.gid + 1 %}
+        {% set gid = 'g' ~ ns2.gid %}
+        {% set section_ids = [] %}
+        {% for r in data %}{% if r[9]==year and r[7]==group %}{% if r[8] not in section_ids %}{% set _ = section_ids.append(r[8]) %}{% endif %}{% endif %}{% endfor %}
+        {% if section_ids %}
+        {% set sess_count = [] %}{% for r in data %}{% if r[9]==year and r[7]==group %}{% set _ = sess_count.append(1) %}{% endif %}{% endfor %}
+        <div class="group-card">
+          <div class="group-card-header gh-{{ yc }}">
+            <span class="group-icon">{{ gicons[group] }}</span>
+            <span>{{ group }}</span>
+            <span class="group-count">{{ sess_count|length }} sessions</span>
+          </div>
+          <div class="group-card-body">
+
+            {% if section_ids|length > 1 %}
+            <div class="sec-tabs">
+              {% for sec in section_ids %}
+              {% set secDivId = gid ~ 's' ~ loop.index %}
+              <button class="sec-tab {% if loop.first %}active{% endif %}"
+                      data-sec-tab="{{ gid }}"
+                      data-sec-target="{{ secDivId }}"
+                      onclick="showSection('{{ gid }}', '{{ secDivId }}')">
+                Section {{ sec }}
+              </button>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for sec in section_ids %}
+            {% set secDivId = gid ~ 's' ~ loop.index %}
+            <div id="{{ secDivId }}" data-group="{{ gid }}" class="{% if not loop.first %}d-none{% endif %}">
+              <div class="tt-wrap">
+                <table class="tt">
+                  <thead>
+                    <tr>
+                      <th>Day</th>
+                      {% for s in slots %}<th><i class="far fa-clock me-1"></i>{{ s }}</th>{% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for day in days %}
+                    <tr>
+                      <td class="day-cell">{{ day }}</td>
+                      {% for slot in slots %}
+                      {% set entries = [] %}
+                      {% for r in data %}
+                        {% if r[9]==year and r[7]==group and r[8]==sec and r[0]==day and r[1]==slot %}
+                          {% set _ = entries.append(r) %}
+                        {% endif %}
+                      {% endfor %}
+                      <td>
+                        {% if entries %}
+                          {% for e in entries %}
+                          {% set is_lab = 'lab' in e[4].lower() %}
+                          <div class="cell-card {% if is_lab %}cell-lab{% else %}cell-lec{% endif %}">
+                            <span class="cell-badge">{% if is_lab %}🧪 Lab{% else %}📖 Lecture{% endif %}</span>
+                            <div class="cell-name">{{ e[4] }}</div>
+                            <div class="cell-info">
+                              <div class="cell-row"><i class="fas fa-user-tie"></i>{{ e[5] }}</div>
+                              <div class="cell-row"><i class="fas fa-door-open"></i>{{ e[6] }}</div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        {% else %}
+                          <div class="cell-empty">—</div>
+                        {% endif %}
+                      </td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn-dl" onclick="downloadSection('{{ secDivId }}', '{{ year|replace(' ','_') }}_{{ group|replace(' ','_') }}_Sec_{{ sec }}.pdf')">
+                <i class="fas fa-file-pdf"></i> Download {{ group }} — Section {{ sec }}
+              </button>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+
+      {% else %}
+      <!-- Departments -->
+      {% for dept in depts %}
+        {% set ns2.gid = ns2.gid + 1 %}
+        {% set gid = 'g' ~ ns2.gid %}
+        {% set section_ids = [] %}
+        {% for r in data %}{% if r[9]==year and r[7].startswith(dept) %}{% if r[8] not in section_ids %}{% set _ = section_ids.append(r[8]) %}{% endif %}{% endif %}{% endfor %}
+        {% if section_ids %}
+        {% set sess_count = [] %}{% for r in data %}{% if r[9]==year and r[7].startswith(dept) %}{% set _ = sess_count.append(1) %}{% endif %}{% endfor %}
+        <div class="group-card">
+          <div class="group-card-header gh-{{ yc }}">
+            <span class="group-icon">{{ dicons[dept] }}</span>
+            <span>{{ dept }} Department</span>
+            <span class="group-count">{{ sess_count|length }} sessions</span>
+          </div>
+          <div class="group-card-body">
+
+            {% if section_ids|length > 1 %}
+            <div class="sec-tabs">
+              {% for sec in section_ids %}
+              {% set secDivId = gid ~ 's' ~ loop.index %}
+              <button class="sec-tab {% if loop.first %}active{% endif %}"
+                      data-sec-tab="{{ gid }}"
+                      data-sec-target="{{ secDivId }}"
+                      onclick="showSection('{{ gid }}', '{{ secDivId }}')">
+                Section {{ sec }}
+              </button>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for sec in section_ids %}
+            {% set secDivId = gid ~ 's' ~ loop.index %}
+            <div id="{{ secDivId }}" data-group="{{ gid }}" class="{% if not loop.first %}d-none{% endif %}">
+              <div class="tt-wrap">
+                <table class="tt">
+                  <thead>
+                    <tr>
+                      <th>Day</th>
+                      {% for s in slots %}<th><i class="far fa-clock me-1"></i>{{ s }}</th>{% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for day in days %}
+                    <tr>
+                      <td class="day-cell">{{ day }}</td>
+                      {% for slot in slots %}
+                      {% set entries = [] %}
+                      {% for r in data %}
+                        {% if r[9]==year and r[7].startswith(dept) and r[8]==sec and r[0]==day and r[1]==slot %}
+                          {% set _ = entries.append(r) %}
+                        {% endif %}
+                      {% endfor %}
+                      <td>
+                        {% if entries %}
+                          {% for e in entries %}
+                          {% set is_lab = 'lab' in e[4].lower() %}
+                          <div class="cell-card {% if is_lab %}cell-lab{% else %}cell-lec{% endif %}">
+                            <span class="cell-badge">{% if is_lab %}🧪 Lab{% else %}📖 Lecture{% endif %}</span>
+                            <div class="cell-name">{{ e[4] }}</div>
+                            <div class="cell-info">
+                              <div class="cell-row"><i class="fas fa-user-tie"></i>{{ e[5] }}</div>
+                              <div class="cell-row"><i class="fas fa-door-open"></i>{{ e[6] }}</div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        {% else %}
+                          <div class="cell-empty">—</div>
+                        {% endif %}
+                      </td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn-dl" onclick="downloadSection('{{ secDivId }}', '{{ year|replace(' ','_') }}_{{ dept }}_Sec_{{ sec }}.pdf')">
+                <i class="fas fa-file-pdf"></i> Download {{ dept }} — Section {{ sec }}
+              </button>
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <p>© 2025 CSIT Department &nbsp;|&nbsp; <i class="fas fa-code"></i> Automated Timetable System</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

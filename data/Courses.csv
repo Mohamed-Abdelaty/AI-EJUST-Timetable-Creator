@@ -1,0 +1,124 @@
+CourseID,CourseName,Credits,Type,Year,Department
+LRA401,Japanese Language (1),2,Lab,1st Year,CSIT
+LRA104,Music and Technology,2,Lecture,1st Year,CSIT
+PHY1130,Physics Lab,1,Lab,1st Year,CSIT
+ECE1110,Digital Logic Lab,1,Lab,1st Year,CSIT
+CSC111,Fundamentals of Programming,3,Lecture,1st Year,CSIT
+CSC1110,Fundamentals of Programming,1,Lab,1st Year,CSIT
+MTH111,Mathematics,3,Lecture,1st Year,CSIT
+MTH1110,Mathematics,1,Lab,1st Year,CSIT
+PHY113,Physics (1),3,Lecture,1st Year,CSIT
+LRA101,Japanese Culture,2,Lab,1st Year,CSIT
+ECE111,Digital Logic Design,3,Lecture,1st Year,CSIT
+
+MTH212,Probability and Statistics,3,Lecture,2nd Year,CSIT
+MTH2120,Probability and Statistics,3,Lab,2nd Year,CSIT
+ACM215,Ordinary Differential Equations,3,Lecture,2nd Year,CSIT
+ACM2150,Ordinary Differential Equations,1,Lab,2nd Year,CSIT
+LRA403,Japanese Language (3),2,Lab,2nd Year,CSIT
+CSC211,Software Engineering,3,Lecture,2nd Year,CSIT
+CNC111,Networks and Web Programming,3,Lecture,2s2ndt Year,CSIT
+CSE2140,Computer Organization Lab,1,Lab,2nd Year,CSIT
+CNC1110,Networks Lab,1,Lab,2nd Year,CSIT
+CSE214,Computer Organization,3,Lecture,2nd Year,CSIT
+CSC2110,Software Engineering Lab,1,Lab,2nd Year,CSIT
+LRA306,Natural Resources and Sustainability,2,Lecture,2nd Year,CSIT
+CSC114,Algorithms and Design,3,Lecture,2nd Year,CSIT
+CSC1140,Algorithms Lab,1,Lab,2nd Year,CSIT
+
+ECE324,Digital Signal Processing,3,Lecture,3rd Year,"CSC,CNC,AID"
+ECE3240,Digital Signal Processing Lab,1,Lab,3rd Year,"CSC,CNC,AID"
+CSC317,Computer Graphics,3,Lecture,3rd Year,"CSC,CNC,AID"
+CSC3170,Graphics Lab,1,Lab,3rd Year,"CSC,CNC,AID"
+AID312,Intelligent Systems,3,Lecture,3rd Year,"CSC,CNC,AID,BIF"
+AID3120,Intelligent Systems Lab,1,Lab,3rd Year,"CSC,CNC,AID,BIF"
+CNC311,Computer Networks,3,Lecture,3rd Year,"CSC,CNC,AID,BIF"
+CNC3110,Networks Lab,1,Lab,3rd Year,"CSC,CNC,AID,BIF"
+CSC314,Software Modeling,3,Lecture,3rd Year,CSC
+CSC3140,Modeling Lab,1,Lab,3rd Year,CSC
+CNC314,Database Systems,3,Lecture,3rd Year,"CSC,CNC,AID,BIF"
+CNC3140,Database Lab,1,Lab,3rd Year,"CSC,CNC,AID,BIF"
+CNC312, Foundations of Information Systems,3,Lecture,3rd Year,CNC
+CNC3120, Foundations of Information Systems,1,Lab,3rd Year,CNC
+AID311,Mathematics of Data Science,3,Lecture,3rd Year,AID
+AID3110,Mathematics of Data Science,1,Lab,3rd Year,AID
+BIF311,Human Biology,3,Lecture,3rd Year,BIF
+BIF3110,Human Biology,1,Lab,3rd Year,BIF
+CSC315,Seminar and Project-Based Learning,3,Lecture,3rd Year,BIF
+CSC3150,Seminar and Project-Based Learning,1,Lab,3rd Year,BIF
+
+
+
+
+CSC414,Game Design and Development,3,Lecture,4th Year,CSC
+CSC4140,Game Development Lab,1,Lab,4th Year,CSC
+CSC415,New Trends in Computer Science,3,Lecture,4th Year,CSC
+CSC4150,New Trends Lab,1,Lab,4th Year,CSC
+CSC426,Distributed Systems,3,Lecture,4th Year,CSC
+CSC4260,Distributed Systems Lab,1,Lab,4th Year,CSSC
+CSC410,Software Quality,3,Lecture,4th Year,CSC
+CSC4100,Software Quality Lab,1,Lab,4th Year,CSC
+CSC412,Software Security,3,Lecture,4th Year,CSC
+CSC411,Software Verification,3,Lecture,4th Year,CSC
+CSC4110,Verification Lab,1,Lab,4th Year,CSC
+CSC413,Graduation Project I,5,Lecture,4th Year,CSC
+
+
+
+ CNC413,Digital Forensics,3,Lecture,4th Year,CNC
+ CNC4130,Digital Forensics,1,Lab,4th Year,CNC
+ CNC419,IT Security and Risk Management,3,Lecture,4th Year,CNC
+ CNC4190,IT Security and Risk Management,1,Lab,4th Year,CNC
+ CNC418,Software Security,3,Lecture,4th Year,CNC
+ CNC4180,Software Security,1,Lab,4th Year,CNC
+ CNC411,Fundamentals of Cybersecurity,3,Lecture,4th Year,CNC
+ CNC4110,Fundamentals of Cybersecurity,1,Lab,4th Year,CNC
+ CNC415,Network Design and Management,3,Lecture,4th Year,CNC
+ CNC4150,Network Design and Management,1,Lab,4th Year,CNC
+ CNC324,IT Infrastructure,3,Lecture,4th Year,CNC 
+ CNC3240,IT Infrastructure,1,Lab,4th Year,CNC  
+ CNC414,Graduation Project I,2,Lecture,4th Year,CNC
+
+
+
+AID428,New Trends in AI,3,Lecture,4th Year,AID
+AID4280,New Trends in AI,1,Lab,4th Year,AID
+AID417,Advanced Data Mining,3,Lecture,4th Year,AID
+AID4170,Advanced Data Mining,1,Lab,4th Year,AID
+AID413,Data Security ,3,Lecture,4th Year,AID
+AID4130,Data Security,1,Lab,4th Year,AID
+AID427,New Trends in Data Science ,3,Lecture,4th Year,AID
+AID4270,New Trends in Data Science ,1,Lab,4th Year,AID
+AID411,BIG Data Analytics & Visualization ,3,Lecture,4th Year,AID
+AID4110,BIG Data Analytics & Visualization,1,Lab,4th Year,AID
+AID321,Machine Learning,3,Lecture,4th Year,AID
+AID3210,Machine Learning,1,Lab,4th Year,AID
+AID414,Graduation Project I,2,Lecture,4th Year,AID
+
+
+
+
+BIF412,Management and Design of Health Care Systems,3,Lecture,4th Year,BIF
+BIF4120,Management and Design of Health Care Systems,1,Lab,4th Year,BIF
+BIF411,Structural Bioinformatics,3,Lecture,4th Year,BIF 
+BIF4110,Structural Bioinformatics,1,Lab,4th Year,BIF 
+BIF413,Algorithms in Bioinformatics,3,Lecture,4th Year,BIF 
+BIF4130,Algorithms in Bioinformatics,1,Lab,4th Year,BIF
+BIF425,New Trends in Bioinformatics,3,Lecture,4th Year,BIF
+BIF4250,New Trends in Bioinformatics,1,Lab,4th Year,BIF
+BIF424,IT Infrastructure,3,Lecture,4th Year,BIF  
+BIF4240,IT Infrastructure,1,Lab,4th Year,BIF
+BIF410,Graduation Project (1),2,Lecture,4th Year,BIF
+
+
+
+
+
+
+
+
+
+
+
+
+

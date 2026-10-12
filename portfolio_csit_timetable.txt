@@ -1,0 +1,66 @@
+# CSIT Timetable Engine — Developer Portfolio
+
+## 1. Project Title
+CSIT Timetable Engine
+
+## 2. Tagline
+Automated constraint-driven scheduling engine generating conflict-free academic timetables for university departments and faculty.
+
+## 3. Overview
+Academic scheduling across multi-cohort degree programs, specialized engineering departments, and shared laboratory facilities is an NP-hard combinatorial problem that frequently suffers from instructor double-booking, room collisions, and fragmented student schedules. CSIT Timetable Engine solves this challenge by implementing an automated Constraint Satisfaction Problem (CSP) solver that couples backtracking search and forward checking with heuristic soft-scoring to schedule hundreds of sessions in under two seconds. Designed for academic departments, faculty, and students, the platform pairs high-speed scheduling logic with an interactive web dashboard, faculty workload management, and client-side multi-format PDF generation.
+
+## 4. Key Features
+- Solves complex multi-year academic scheduling by resolving 302 CSP variables and allocating 433 sessions across 4 cohorts in 1.47 seconds using backtracking search and forward checking.
+- Eliminates room, instructor, and student group collisions through rigorous hard constraint validation and qualification-based domain filtering across 72 instructors and 133 facilities.
+- Optimizes weekly student schedule quality using a soft heuristic scoring function that prioritizes core midday time slots, minimizes idle gaps between consecutive classes, and balances daily cohort workload.
+- Visualizes comprehensive academic timetables through an interactive web portal featuring cohort tab switching, department-specific tracks, and live metric KPI counters.
+- Filters teaching schedules dynamically using real-time client-side search and jump navigation across 54 actively scheduled faculty members.
+- Exports publication-ready landscape A4 PDF timetables directly in the browser for individual sections, specific faculty members, or the entire institutional curriculum.
+
+## 5. Tech Stack
+- Frontend: HTML5, CSS3 (Glassmorphism, CSS Grid, Flexbox), JavaScript (ES6+), Bootstrap 5.3.3, Font Awesome 6.5.0, html2pdf.js 0.9.2 (html2canvas, jsPDF)
+- Backend: Python 3, Flask, Jinja2
+- Database: SQLite3, SQL, CSV flat-file pipelines
+- ML/Data: Constraint Satisfaction Problem (CSP) Solver, Backtracking Search, Forward Checking, Minimum Remaining Values (MRV) Heuristic, Multi-Criteria Soft Scoring Optimization, Python CSV Ingestion & Data Transformation
+- DevOps/Tools: Subprocess IPC & Process Management, Python Standard Library (sqlite3, csv, subprocess, collections, random, time)
+
+## 6. Architecture & Technical Highlights
+- Heuristic CSP Solver Architecture: Implemented a backtracking search engine that applies the Minimum Remaining Values (MRV) heuristic for fail-first variable selection, paired with Forward Checking and domain pruning to trim search trees across 302 variables and ~190,000 potential domain states.
+- Multi-Criteria Soft Optimization Engine: Engineered a custom scoring heuristic that dynamically ranks candidate slot options—rewarding prime midday slots (10:45 AM and 12:30 PM), penalizing extreme start times (9:00 AM and 2:15 PM), incentivizing compact consecutive session blocks, and capping single-day cohort loads at two sessions.
+- Modular Cohort Decomposition: Partitioned the institutional scheduling space into independent academic cohort pipelines (1st through 4th Year), enabling end-to-end schedule generation (433 total sessions) in 1.47 seconds total execution time without recursion depth overflows.
+- Client-Side Vector PDF Pipeline: Decoupled document rendering from backend server processes using html2pdf.js, rendering high-resolution (2x canvas scale) landscape A4 documents directly from the DOM for sections, individual faculty members, or the full institutional schedule.
+
+## 7. My Role & Contributions
+- Engineered the core CSP scheduling engine in Python (`generate_timetable.py`), implementing variable construction, domain generation, forward-checking pruning, MRV variable ordering, and multi-criteria soft scoring.
+- Built the automated data ingestion pipeline (`create_database.py`), parsing and normalizing raw academic CSV datasets into a relational SQLite schema spanning 6 tables.
+- Developed the Flask web service (`app.py`), designing 4 HTTP endpoints, orchestrating background solver process execution via Python subprocess, and implementing faculty schedule deduplication filters.
+- Crafted the frontend user experience (`timetable.html`, `instructor_timetable.html`, `style.css`), implementing modern glassmorphic UI components, animated counter statistics, responsive schedule matrices, and live faculty search.
+- Integrated browser-side PDF export workflows (`script.js`), enabling one-click client-side export for individual student sections, individual instructor timetables, and multi-page departmental schedules.
+- Formulated constraint verification routines (`verify_constraints.py`) to systematically audit schedule integrity, confirming zero intra-cohort hard conflicts across all 433 generated sessions.
+
+## 8. Challenges & Solutions
+- Combinatorial Explosion in Multi-Resource Matching:
+  - Challenge: Allocating 94 courses across 72 instructors, 133 rooms, and 20 weekly time slots creates an enormous combinatorial state space (~190,000 combinations per session variable), threatening severe search tree timeouts.
+  - Solution: Implemented multi-stage domain pruning: pre-filtered instructor domains based on verified course qualifications, restricted rooms by facility type (Lecture hall vs Lab), capped domains at 500 options with randomized shuffling, and applied Forward Checking to prune conflicting domains after each assignment step.
+- Balancing Pedagogical Schedule Quality with Constraint Feasibility:
+  - Challenge: Traditional hard constraint satisfaction often yields erratic, pedagogically poor schedules filled with isolated single-period classes, excessive idle gaps, and disproportionate daily course clustering.
+  - Solution: Developed an integrated soft-scoring heuristic (`soft_score`) that dynamically evaluates candidate domain options. The heuristic assigns positive weights (+2.0) to central midday slots, rewards temporally adjacent sessions (+1.5), penalizes multi-period gaps (-1.0 per gap unit), and penalizes days exceeding two classes per cohort (-1.5) to distribute academic workload evenly across the 5-day week.
+- Cross-Cohort Resource Contention under Modular Solver Architecture:
+  - Challenge: Decomposing the scheduling problem by academic cohort dramatically accelerated computation (sub-second per cohort), but risked cross-year resource collisions when faculty members teach across multiple undergraduate years.
+  - Solution: Preserved strict intra-cohort constraint enforcement achieving 0 hard conflicts across all 4 cohorts, and engineered a web-layer deduplication filter in `app.py` for faculty timetable views to collapse overlapping multi-section assignments into unified time slots, backed by automated constraint verification scripts (`verify_constraints.py`).
+
+## 9. Results & Impact
+- Total Scheduled Sessions: 433 academic sessions scheduled across a 5-day academic week (Sunday to Thursday).
+- Solver Throughput & Runtime: Solved 302 CSP decision variables across 4 academic cohorts in 1.47 seconds total execution time (1st Year: 69 variables in 0.28s; 2nd Year: 81 variables in 0.36s; 3rd Year: 76 variables in 0.38s; 4th Year: 76 variables in 0.45s).
+- Intra-Cohort Constraint Accuracy: 100% constraint satisfaction with 0 intra-cohort hard conflicts (0 room collisions and 0 instructor collisions within cohorts) across all 4 undergraduate years.
+- Database & Data Pipeline Scale: Ingested and structured 5 CSV datasets into a 100 KB relational SQLite database consisting of 6 normalized tables (`Instructors`, `Courses`, `Rooms`, `TimeSlots`, `Sections`, `Schedule`).
+- Resource Footprint: Successfully allocated 94 courses (49 lectures, 45 lab sessions) across 72 instructors and 133 facilities (75 lecture halls, 58 specialized computer laboratories) into 20 weekly time slots (4 daily periods: 9:00 AM, 10:45 AM, 12:30 PM, 2:15 PM).
+- Departmental & Cohort Coverage: Complete scheduling coverage for 4 undergraduate cohorts across 36 student sections, encompassing 4 specialized degree programs (Computer Science [CSC], Computer Networks & Communications [CNC], Artificial Intelligence & Data Science [AID], Bioinformatics [BIF]) and foundational CSIT coursework.
+- API Endpoints & Web Services: 4 Flask web routes (`/`, `/timetable`, `/instructors`, `/generate`) delivering sub-second database queries and on-demand timetable regeneration.
+- Document Generation Targets: 3 browser-rendered PDF export workflows (section schedule, instructor schedule, institutional master schedule) utilizing client-side 2x canvas scaling.
+
+## 10. Short Version
+CSIT Timetable Engine is an automated academic scheduling platform that solves complex university timetabling using Constraint Satisfaction Problem (CSP) algorithms and backtracking search with forward checking. The system schedules 433 academic sessions across 4 undergraduate years, 94 courses, and 133 rooms in just 1.47 seconds with zero intra-cohort conflicts. Built with Python, SQLite, Flask, and Vanilla JavaScript, it features an interactive web dashboard, real-time faculty search, and client-side multi-format PDF generation.
+
+## 11. Links
+[GitHub Repo]
